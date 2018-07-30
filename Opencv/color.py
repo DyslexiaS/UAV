@@ -8,4 +8,4 @@ while True:
 	upper_blue = np.array([124,255,255])
 	mask_blue = cv2.inRange(hsv, lower_blue, upper_blue)
 	res_blue = cv2.bitwise_and(img,img, mask= mask_blue)
-	cv2.imwrite('mask_'+inimg+'.jpg',res_blue)
+	cv2.imwrite('mask_'+inimg,res_blue)
