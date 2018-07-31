@@ -4,7 +4,7 @@ import math
 from os import listdir
 from os.path import isfile, join
 
-def catch_circle(path, dis):
+def detect_circle(path, dis):
   img = cv2.imread(path,0)
   img = cv2.medianBlur(img,13)
 
