@@ -1,8 +1,6 @@
 import cv2
 import numpy as np
 import math
-from os import listdir
-from os.path import isfile, join
 
 def detect_circle(path, dis):
   img = cv2.imread(path,0)
@@ -34,3 +32,12 @@ def detect_circle(path, dis):
   # cv2.imshow("detected",img)
   # cv2.waitKey(0)
   # cv2.destroyAllWindows()
+
+def rgb2blue(img):
+  hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+  lower_blue = np.array([90,43,46])
+  upper_blue = np.array([124,255,255])
+  mask_blue = cv2.inRange(hsv, lower_blue, upper_blue)
+  res_blue = cv2.bitwise_and(img, img, mask=mask_blue)
+  return res_blue
+  # cv2.imwrite('mask_'+inimg,res_blue)
