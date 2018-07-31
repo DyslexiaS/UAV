@@ -1,22 +1,36 @@
 import cv2
 import numpy as np
+import math
+from os import listdir
+from os.path import isfile, join
 
-img = cv2.imread('c.jpg',0)
-img = cv2.medianBlur(img,5)
-cimg = cv2.cvtColor(img,cv2.COLOR_GRAY2BGR)
+def catch_circle(path, dis):
+  img = cv2.imread(path,0)
+  img = cv2.medianBlur(img,13)
 
-circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1,20,
-                            param1=50,param2=30,minRadius=0,maxRadius=0)
+  error = 0.2
+  min_dis = min(dis*(1-error), dis-100)
+  if min_dis <= 0:
+    min_dis = 0.1
+  max_dis = min(dis*(1+error), dis+100)
+  minRadius = int(math.floor(35.6 * 865 / (max_dis*1.38*2)))
+  maxRadius = int(math.ceil(35.6 * 865 / (min_dis*1.38*2)))
 
-circles = np.uint16(np.around(circles))
-for i in circles[0,:]:
-    # draw the outer circle
-    cv2.circle(cimg,(i[0],i[1]),i[2],(0,255,0),2)
-    # draw the center of the circle
-    cv2.circle(cimg,(i[0],i[1]),2,(0,0,255),3)
+  circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1,20,
+      param1=50,param2=20, minRadius=minRadius, maxRadius=maxRadius)
+  circles = np.uint16(np.around(circles))
+  print(dis, minRadius, maxRadius)
+  print(circles)
 
-cv2.namedWindow("detected circles",0);
-cv2.resizeWindow("detected circles", 1280, 960);
-cv2.imshow('detected circles',cimg)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+  if circles is not None  :
+    for i in circles[0,:]:
+      center = (i[0], i[1])
+      radius = i[2]
+      cv2.circle(img, center, 3, (0, 0, 0), -1, 8, 0)
+      cv2.circle(img, center, radius, (255,255,255),3, 8, 0)
+  cv2.imwrite(path+'qq.jpg', img)
+  # cv2.namedWindow("detected circles",0);
+  # cv2.resizeWindow("detected circles", 1280, 960);
+  # cv2.imshow("detected",img)
+  # cv2.waitKey(0)
+  # cv2.destroyAllWindows()
