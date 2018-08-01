@@ -69,17 +69,13 @@ else:
   vehicle = connect(connect_Sitl, wait_ready = True)
 
 while True:
-  print_alt(vehicle)
-  time.sleep(1)
-
-idx = 0
-while True:
   print_info(vehicle)
   try:
+    print('#' * 30)
     sys.argv = raw_input('execute: ').split()
-    if (sys.argv[0] == 'detect'):
-      sys.argv.append(str(idx))
-      idx += 1
+    # if (sys.argv[0] == 'detect'):
+    #   sys.argv.append(str(idx))
+    #   idx += 1
     execfile(sys.argv[0] + '.py')
   except Exception, e:
     print(e)

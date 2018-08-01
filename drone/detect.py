@@ -24,7 +24,7 @@ except Exception, e:
 
 alt = int(100*vehicle.location.global_relative_frame.alt)
 
-img_dir = 'img'
+img_dir = '../img'
 img_name = '%d_%d.jpg' % (idx, alt)
 img_path = join(img_dir, img_name)
 

@@ -1,12 +1,13 @@
 import cv2
+import cv2.cv as cv
 import math
 import numpy as np
 
 def imread(path):
-  return cv2.imread(path,0)
+  return cv2.imread(path)
 
 def imwrite(path, img):
-  cv2.imwrite(path,img)
+  cv2.imwrite(path, img)
 
 def rgb2blue(img):
   hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
@@ -32,7 +33,7 @@ def detect_circles(img, alt):
   minRadius = int(math.floor(35.6 * 865 / alt2diagonal(max_alt) / 2))
   maxRadius = int(math.ceil(35.6 * 865 / alt2diagonal(min_alt) / 2))
 
-  circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1,20,
+  circles = cv2.HoughCircles(img,cv.HOUGH_GRADIENT,1,20,
       param1=50,param2=20, minRadius=minRadius, maxRadius=maxRadius)
   print(alt, minRadius, maxRadius)
   print(circles)
