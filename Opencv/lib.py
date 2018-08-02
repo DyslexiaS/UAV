@@ -40,7 +40,7 @@ def detect_circles(img, alt):
   print(circles)
   return circles
 
-def best_circle(circles):
+def best_circle(circles,bgr=[176,122,61]):
   return None if circles is None else circles[0][0]
 
 def draw_circle(img, circle):
