@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
-from __main__ import vehicle, camera
-from dronekit import VehicleMode
 import math
 
 from os import listdir
@@ -36,6 +34,7 @@ img = imread(img_path)
 img = rgb2blue(img)
 circles = detect_circles(img, alt)
 circle = best_circle(circles)
+# print(img[round(circle[0]),round(circle[1])])
 
 save_result = True
 if save_result and circle is not None:
@@ -54,16 +53,16 @@ else:
 
   # first quadrant
   if displacement[0] >= 0 and displacement[1] >= 0:
-    direction = math.pi + math.atan2(displacement[1], displacement[0])
+    direction = math.atan2(displacement[1], displacement[0])
   # second quadrant
   elif displacement[0] >= 0 and displacement[1] < 0:
-    direction = math.pi + math.atan2(-displacement[1], displacement[0])
+    direction = -math.atan2(-displacement[1], displacement[0])
   # third quadrant
   elif displacement[0] < 0 and displacement[1] < 0:
-    direction = math.atan2(displacement[1], displacement[0])
+    direction = math.pi + math.atan2(displacement[1], displacement[0])
   # fourth quadrant
   else:
-    direction = math.atan2(displacement[1], -displacement[0])
+    direction = math.pi - math.atan2(displacement[1], -displacement[0])
 
   # convert to relative direction
   direction += vehicle.attitude.yaw

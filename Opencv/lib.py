@@ -34,7 +34,8 @@ def detect_circles(img, alt):
   maxRadius = int(math.ceil(35.6 * 865 / alt2diagonal(min_alt) / 2))
 
   circles = cv2.HoughCircles(img,cv2.cv.CV_HOUGH_GRADIENT,1,20,
-      param1=50,param2=20, minRadius=minRadius, maxRadius=maxRadius)
+      param1=50,param2=20, minRadius=0, maxRadius=0)
+      # param1=50,param2=20, minRadius=minRadius, maxRadius=maxRadius)
   print(alt, minRadius, maxRadius)
   print(circles)
   return circles
