@@ -51,18 +51,37 @@ else:
   displacement = [alt2diagonal(alt) * d / 865 for d in displacement]
 
   distance = math.sqrt(displacement[0]**2 + displacement[1]**2)
-  angle = math.atan(distance/alt)
-  direction = vehicle.attitude.yaw + math.atan(-displacement[0] / displacement[1])
 
-  speed_xy = 0.001
-  speed_z = 0.001
+  # first quadrant
+  if displacement[0] >= 0 and displacement[1] >= 0:
+    direction = math.pi + math.atan2(displacement[1], displacement[0])
+  # second quadrant
+  elif displacement[0] >= 0 and displacement[1] < 0:
+    direction = math.pi + math.atan2(-displacement[1], displacement[0])
+  # third quadrant
+  elif displacement[0] < 0 and displacement[1] < 0:
+    direction = math.atan2(displacement[1], displacement[0])
+  # fourth quadrant
+  else:
+    direction = math.atan2(displacement[1], -displacement[0])
+
+  # convert to relative direction
+  direction += vehicle.attitude.yaw
+
+  angle = math.atan(distance/alt)
+  # scale
+  speed_xy = 0.01
+  speed_z = 0.01
+
   velocity_x = speed_xy * math.cos(direction)
   velocity_y = speed_xy * math.sin(direction)
-  velocity_z = speed_z * math.sqrt(alt) * (20*math.pi/180 - angle)
-  ##  send_global_velocity(vehicle, velocity_x, velocity_y, velocity_z)
+  velocity_z = speed_z  * math.sqrt(alt) * (20*math.pi/180 - angle)
+  # send_global_velocity(vehicle, velocity_x, velocity_y, velocity_z)
   print(circle)
   with open("qq.txt", "a") as f:
     print("dis x, dis y, direction, angle, alt, velocity_x, velocity_y, velocity_z\n", file=f)
-    print(displacement[0], displacement[1], direction-vehicle.attitude.yaw*180/math.pi, angle*180/math.pi, alt, velocity_x, velocity_y, velocity_z, "\n", file=f)
+    print(displacement[0], displacement[1], math.degrees(direction-vehicle.attitude.yaw),
+        math.degrees(angle), alt, velocity_x, velocity_y, velocity_z, "\n", file=f)
   print("dis x, dis y, direction, angle, velocity_x, velocity_y, velocity_z")
-  print(displacement[0], displacement[1], direction-vehicle.attitude.yaw*180/math.pi, angle*180/math.pi, velocity_x, velocity_y, velocity_z)
+  print(displacement[0], displacement[1], math.degrees(direction-vehicle.attitude.yaw),
+      math.degrees(angle), alt, velocity_x, velocity_y, velocity_z)
