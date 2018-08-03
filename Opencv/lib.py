@@ -40,8 +40,34 @@ def detect_circles(img, alt):
   print(circles)
   return circles
 
-def best_circle(circles,bgr=[176,122,61]):
-  return None if circles is None else circles[0][0]
+def best_circle(circles,img):
+    # standard blue [176,122,61]
+    s_color = [176,122,61] #s_color -> standard color
+    circles = np.uint16(np.around(circles)) #need to round the x y coordinate for img[y,x]
+    lost = 0
+    circle_index = 0
+    counter = 0
+    for index in circles[0,:]:
+        # average the color among center and other four points around it
+        B = (int(img[index[1],index[0]][0]) + int(img[index[1]+10,index[0]+10][0]) + int(img[index[1]+10,index[0]-10][0]) + int(img[index[1]-10,index[0]+10][0]) 
+                + int(img[index[1]-10,index[0]-10][0]))//5
+        G = (int(img[index[1],index[0]][1]) + int(img[index[1]+10,index[0]+10][1]) + int(img[index[1]+10,index[0]-10][1]) + int(img[index[1]-10,index[0]+10][1]) 
+                + int(img[index[1]-10,index[0]-10][1]))//5
+        R = (int(img[index[1],index[0]][2]) + int(img[index[1]+10,index[0]+10][2]) + int(img[index[1]+10,index[0]-10][2]) + int(img[index[1]-10,index[0]+10][2]) 
+                + int(img[index[1]-10,index[0]-10][2]))//5
+        #print 'B:',B,'G:',G,'R:',R
+        tmp_lost = (B-s_color[0])**2 + abs(G-s_color[1]) + abs(R-s_color[2]) #give blue color more weight 
+        tmp_lost = tmp_lost * (counter * 0.5 + 1) # set weight for circle order
+        if lost == 0:
+            lost = tmp_lost
+        else:
+            if lost > tmp_lost:
+                lost = tmp_lost
+                circle_index = counter
+        counter += 1  
+        #print lost
+
+    return None if circles is None else [[circles[0][circle_index]]]   #return a 3d array [[[a,b,c]]]
 
 def draw_circle(img, circle):
   if circle is None:
