@@ -5,7 +5,7 @@ from __future__ import print_function
 from dronekit import connect, VehicleMode
 import sys
 import time
-from picamera import PiCamera
+# from picamera import PiCamera
 
 def print_info(vehicle):
   print("Autopilot Firmware version: %s" % vehicle.version)
@@ -45,8 +45,9 @@ def print_info(vehicle):
   print( "Armed: %s" % vehicle.armed)
   print("alt = ", vehicle.location.global_relative_frame.alt)
 
-def print_alt(vehicle):
+def print_important(vehicle):
   print("alt = ", vehicle.location.global_relative_frame.alt)
+  print( "Battery: %s" % vehicle.battery)
 
 WIRELESS = 0
 WIRED = 1
@@ -70,16 +71,13 @@ else:
   connect_Sitl = '127.0.0.1:14551'
   vehicle = connect(connect_Sitl, wait_ready = True)
 
-camera = PiCamera()
+#  camera = PiCamera()
 
 while True:
-  print_info(vehicle)
+  print_important(vehicle)
   try:
     print('#' * 30)
     sys.argv = raw_input('execute: ').split()
-    # if (sys.argv[0] == 'detect'):
-    #   sys.argv.append(str(idx))
-    #   idx += 1
     execfile(sys.argv[0] + '.py')
   except Exception, e:
     print(e)

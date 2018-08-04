@@ -50,9 +50,9 @@ def on_press(key):
       send_global_velocity(vehicle, velocity_x, velocity_y, 0)
     elif k in ['a', 'd']:
       if k == 'a':
-        yaw_delta = -5
+        yaw_delta = -10
       elif k == 'd':
-        yaw_delta = 5
+        yaw_delta = 10
       else:
         yaw_delta = 0
       vehicle.gimbal.rotate(0, 0, rad2deg(vehicle.attitude.yaw) + yaw_delta)
@@ -66,6 +66,7 @@ def on_release(key):
     elif k in ['up', 'down', 'left', 'right', 'w', 's']:
       send_global_velocity(vehicle, 0, 0, 0)
 
+send_global_velocity(vehicle, 0, 0, 0)
 print( "Enter:", end='')
 lis = keyboard.Listener(on_press=on_press, on_release=on_release)
 lis.start() # start to listen on a separate thread
