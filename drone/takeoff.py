@@ -9,6 +9,7 @@ from dronekit import VehicleMode
 def arm_and_takeoff(aTargetAltitude):
     print('arm and takeoff to %d' % (aTargetAltitude))
     print("Basic pre-arm checks")
+    vehicle.home_location=vehicle.location.global_frame
     # vehicle.is_armable会检查飞控是否启动完成、有无GPS fix、卡曼滤波器
     # while not vehicle.mode.name == "INITIALISING":
     while not vehicle.is_armable:
@@ -39,7 +40,7 @@ def arm_and_takeoff(aTargetAltitude):
         # vehicle.location.global_relative_frame.alt为相对于home点的高度
         if vehicle.location.global_relative_frame.alt >= aTargetAltitude * 0.95:
             print("Reached target altitude")
-            break
+            ibreak
         # 等待1s
         time.sleep(1)
 
@@ -49,3 +50,4 @@ except:
   aTargetAltitude = 5
 
 arm_and_takeoff(aTargetAltitude)
+vehicle.mode = VehicleMode("ALT_HOLD")

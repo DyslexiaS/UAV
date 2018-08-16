@@ -51,13 +51,25 @@ def best_circle(circles,img):
     counter = 0
     for index in circles[0,:]:
         radius_2 = index[2]//2
-        # average the color among center and other four points around it
-        B = (int(img[index[1],index[0]][0]) + int(img[index[1]+radius_2,index[0]+radius_2][0]) + int(img[index[1]+radius_2,index[0]-radius_2][0]) + int(img[index[1]-radius_2,index[0]+radius_2][0])
-                + int(img[index[1]-radius_2,index[0]-radius_2][0]))//5
-        G = (int(img[index[1],index[0]][1]) + int(img[index[1]+radius_2,index[0]+radius_2][1]) + int(img[index[1]+radius_2,index[0]-radius_2][1]) + int(img[index[1]-radius_2,index[0]+radius_2][1])
-                + int(img[index[1]-radius_2,index[0]-radius_2][1]))//5
-        R = (int(img[index[1],index[0]][2]) + int(img[index[1]+radius_2,index[0]+radius_2][2]) + int(img[index[1]+radius_2,index[0]-radius_2][2]) + int(img[index[1]-radius_2,index[0]+radius_2][2])
-                + int(img[index[1]-radius_2,index[0]-radius_2][2]))//5
+        points = [(0,0), (radius_2, 0), (-radius_2, 0), (0, radius_2), (0, -radius_2)]
+        B, G, R = 0, 0, 0
+        for p in points:
+            x, y = index[0]+p[0], index[1]+p[1]
+            if x >= 720:
+                x = 719
+            elif x < 0:
+                x = 0
+            if y >= 480:
+                y = 479
+            elif y < 0:
+                y = 0
+            # average the color among center and other four points around it
+            B += int(img[y,x][0])
+            G += int(img[y,x][1])
+            R += int(img[y,x][2])
+        B = B // 5
+        G = G // 5
+        R = R // 5
         #print 'B:',B,'G:',G,'R:',R
         tmp_lost = (B-s_color[0])**2 + abs(G-s_color[1]) + abs(R-s_color[2]) #give blue color more weight
         tmp_lost = tmp_lost * (counter * 0.5 + 1) # set weight for circle order
