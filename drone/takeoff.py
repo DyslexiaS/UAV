@@ -40,7 +40,7 @@ def arm_and_takeoff(aTargetAltitude):
         # vehicle.location.global_relative_frame.alt为相对于home点的高度
         if vehicle.location.global_relative_frame.alt >= aTargetAltitude * 0.95:
             print("Reached target altitude")
-            ibreak
+            break
         # 等待1s
         time.sleep(1)
 
