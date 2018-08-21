@@ -88,6 +88,7 @@ while keep_running[0]:
     # else:
     #   direction = math.pi - math.atan2(displacement[1], -displacement[0])
     direction = math.atan2(displacement[1], displacement[0])
+    direction -= math.pi / 2
 
     displacement = [alt2diagonal(alt) * d / 865 for d in displacement]
 

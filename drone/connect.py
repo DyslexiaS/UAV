@@ -54,7 +54,7 @@ WIRELESS = 0
 WIRED = 1
 SITL = 2
 
-mode = WIRELESS
+mode = WIRED
 try:
   mode = int(sys.argv[1])
 except Exception, e:
