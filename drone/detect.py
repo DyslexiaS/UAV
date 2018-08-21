@@ -24,6 +24,13 @@ except Exception, e:
   print('set default idx=0')
   idx = 0
 
+try:
+  infinite = int(sys.argv[2])
+except Exception, e:
+  print(e)
+  print('set default: only take 1 photo')
+  infinite = 0
+
 def signal_handler(sig, frame):
   print("stop detecting...")
   keep_running[0] = False
@@ -118,3 +125,6 @@ while keep_running[0]:
           math.degrees(angle), alt, velocity_x, velocity_y, velocity_z), file=f)
     print("%.2f\t%.2f\t %.4f\t%d\t%.5f\t%.5f\t%.5f\n" % (math.degrees(direction), math.degrees(relative_direction),
         math.degrees(angle), alt, velocity_x, velocity_y, velocity_z))
+
+    if infinite == 0:
+      keep_running[0] = False
