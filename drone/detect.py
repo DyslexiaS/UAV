@@ -37,7 +37,7 @@ def signal_handler(sig, frame):
 
 save_result = True
 keep_running = [True]
-signal.signal(signal.SIGINT, signal_handler)
+signal_old = signal.signal(signal.SIGINT, signal_handler)
 
 log_file = "log"
 with open(log_file, "a") as f:
@@ -128,4 +128,7 @@ while keep_running[0]:
         math.degrees(angle), alt, velocity_x, velocity_y, velocity_z))
 
     if infinite == 0:
+      print('infinite == 0')
       keep_running[0] = False
+
+signal.signal(signal.SIGINT, signal_old)

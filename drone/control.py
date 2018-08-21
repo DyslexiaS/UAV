@@ -59,7 +59,7 @@ def on_press(key):
     elif k in ['p', 'l']:
       if k == 'p':
         cmd = 'detect %d' % idx
-      else
+      else:
         cmd = 'detect %d 1' % idx
       idx += 1
       sys.argv = cmd.split()
