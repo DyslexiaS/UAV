@@ -127,8 +127,8 @@ while keep_running[0]:
     print("%.2f\t%.2f\t %.4f\t%d\t%.5f\t%.5f\t%.5f\n" % (math.degrees(direction), math.degrees(relative_direction),
         math.degrees(angle), alt, velocity_x, velocity_y, velocity_z))
 
-    if infinite == 0:
-      print('infinite == 0')
-      keep_running[0] = False
+  if infinite == 0:
+    print('infinite == 0')
+    keep_running[0] = False
 
 signal.signal(signal.SIGINT, signal_old)
