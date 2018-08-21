@@ -80,6 +80,16 @@ while True:
     print('#' * 30)
     sys.argv = raw_input('execute: ').split()
     execfile(sys.argv[0] + '.py')
+    if sys.argv[0] == 'takeoff':
+      try:
+        idx = int(sys.argv[2])
+      except Exception, e:
+        print(e)
+        print('set default idx=0')
+        idx = 0
+      sys.argv = ('control %d' % idx).split()
+      execfile(sys.argv[0] + '.py')
+
   except Exception, e:
     print(e)
     print('e.g. takeoff 10, control')
