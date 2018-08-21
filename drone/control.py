@@ -5,6 +5,7 @@ from __future__ import print_function
 from __main__ import vehicle
 import time
 import math
+import sys
 from dronekit import VehicleMode
 from pynput import keyboard
 from set_velocity import send_global_velocity
@@ -14,7 +15,6 @@ def rad2deg(rad):
 
 def deg2rad(deg):
   return math.pi * deg / 180
-
 
 def on_press(key):
     control_speed = 0.5
@@ -56,6 +56,15 @@ def on_press(key):
       else:
         yaw_delta = 0
       vehicle.gimbal.rotate(0, 0, rad2deg(vehicle.attitude.yaw) + yaw_delta)
+    elif k in ['p', 'l']:
+      if k == 'p':
+        cmd = 'detect %d' % idx
+      else
+        cmd = 'detect %d 1' % idx
+      idx += 1
+      sys.argv = cmd.split()
+      execfile(sys.argv[0] + '.py')
+
     print(" is pressed")
 
 def on_release(key):
@@ -65,6 +74,14 @@ def on_release(key):
       return False # stop listener
     elif k in ['up', 'down', 'left', 'right', 'w', 's']:
       send_global_velocity(vehicle, 0, 0, 0)
+
+
+try:
+  idx = int(sys.argv[1])
+except Exception, e:
+  print(e)
+  print('set default idx=0')
+  idx = 0
 
 send_global_velocity(vehicle, 0, 0, 0)
 print( "Enter:", end='')
