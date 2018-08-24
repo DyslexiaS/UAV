@@ -98,7 +98,15 @@ def draw_circle(img, circle):
   return img
 
 def plot_arrow(img, point, center=(360,240)):
-  cv2.arrowedLine(img, center, point, (0,0,255), 5)
+  cv2.line(img, center, point, (0,0,255), 5)
+  pi = 3.1415926
+  angle = math.atan2(center[1]-point[1], center[0]-point[0])
+  arrow_x = point[0] + 20* math.cos(angle+pi*30/180)
+  arrow_y = point[1] + 20* math.sin(angle+pi*30/180)
+  cv2.line(img, point, (int(arrow_x),int(arrow_y)), (0,0,255), 5)
+  arrow_x = point[0] + 20* math.cos(angle-pi*30/180)
+  arrow_y = point[1] + 20* math.sin(angle-pi*30/180)
+  cv2.line(img, point, (int(arrow_x),int(arrow_y)), (0,0,255), 5)
   return img
 
   # if circles is not None  :
