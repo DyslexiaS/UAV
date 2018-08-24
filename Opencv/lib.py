@@ -36,15 +36,15 @@ def detect_circles(img, alt):
 
   try:
     circles = cv2.HoughCircles(img,cv2.cv.CV_HOUGH_GRADIENT,1,20,
-      param1=50,param2=20, minRadius=0, maxRadius=0)
+      param1=50,param2=23, minRadius=0, maxRadius=0)
   except:
-    circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1,20,
-      param1=50,param2=20, minRadius=0, maxRadius=0)
+    circles = cv2.HoughCircles(img,cv2.cv.CV_HOUGH_GRADIENT,1,20,
+      param1=50,param2=23, minRadius=0, maxRadius=0)
   print(alt, minRadius, maxRadius)
   print(circles)
   return circles
 
-def best_circle(circles,img):
+def best_circle(circles,img,resolution=(720,480)):
     if circles is None:
       return None
     # standard blue [176,122,61]
@@ -59,12 +59,12 @@ def best_circle(circles,img):
         B, G, R = 0, 0, 0
         for p in points:
             x, y = index[0]+p[0], index[1]+p[1]
-            if x >= 720:
-                x = 719
+            if x >= resolution[0]:
+                x = resolution[0] - 1
             elif x < 0:
                 x = 0
-            if y >= 480:
-                y = 479
+            if y >= resolution[1]:
+                y = resolution[1] - 1
             elif y < 0:
                 y = 0
             # average the color among center and other four points around it
@@ -98,7 +98,7 @@ def draw_circle(img, circle):
   return img
 
 def plot_arrow(img, point, center=(360,240)):
-  cv2.arrowedLine(img, center, point, (0,0,255), 5)
+  cv2.line(img, center, point, (0,0,255), 5)
   return img
 
   # if circles is not None  :
