@@ -36,10 +36,10 @@ def detect_circles(img, alt):
 
   try:
     circles = cv2.HoughCircles(img,cv2.cv.CV_HOUGH_GRADIENT,1,20,
-      param1=50,param2=23, minRadius=0, maxRadius=0)
+      param1=50,param2=15, minRadius=0, maxRadius=0)
   except:
-    circles = cv2.HoughCircles(img,cv2.cv.CV_HOUGH_GRADIENT,1,20,
-      param1=50,param2=23, minRadius=0, maxRadius=0)
+    circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1,20,
+      param1=50,param2=15, minRadius=0, maxRadius=0)
   print(alt, minRadius, maxRadius)
   print(circles)
   return circles
@@ -99,6 +99,14 @@ def draw_circle(img, circle):
 
 def plot_arrow(img, point, center=(360,240)):
   cv2.line(img, center, point, (0,0,255), 5)
+  pi = 3.1415926
+  angle = math.atan2(center[1]-point[1], center[0]-point[0])
+  arrow_x = point[0] + 20* math.cos(angle+pi*30/180)
+  arrow_y = point[1] + 20* math.sin(angle+pi*30/180)
+  cv2.line(img, point, (int(arrow_x),int(arrow_y)), (0,0,255), 5)
+  arrow_x = point[0] + 20* math.cos(angle-pi*30/180)
+  arrow_y = point[1] + 20* math.sin(angle-pi*30/180)
+  cv2.line(img, point, (int(arrow_x),int(arrow_y)), (0,0,255), 5)
   return img
 
   # if circles is not None  :
