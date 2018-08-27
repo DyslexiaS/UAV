@@ -123,6 +123,11 @@ def add_text(img, H=100, D=80, Min=0, Max=100):
   cv2.putText(img,text,(75,130),cv2.FONT_HERSHEY_DUPLEX,0.3,color,1)
   return img
 
+def circle_not_found(img):
+  text = "circle not found"
+  cv2.putText(img,text,(5,75),cv2.FONT_HERSHEY_DUPLEX,0.5,(0,0,255),1)
+  return img
+
   # if circles is not None  :
   #   for i in circles[0,:]:
   #     center = (i[0], i[1])
