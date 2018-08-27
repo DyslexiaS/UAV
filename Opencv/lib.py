@@ -97,16 +97,16 @@ def draw_circle(img, circle):
   cv2.circle(img, center, radius, (255,255,255),3, 8, 0)
   return img
 
-def plot_arrow(img, point, center=(75,75)):
-  cv2.line(img, center, point, (0,0,255), 5)
+def plot_arrow(img, point, center=(75,75), color=(0,0,255), line_width=5):
+  cv2.line(img, center, point, color, line_width)
   pi = 3.1415926
   angle = math.atan2(center[1]-point[1], center[0]-point[0])
-  arrow_x = point[0] + 20* math.cos(angle+pi*30/180)
-  arrow_y = point[1] + 20* math.sin(angle+pi*30/180)
-  cv2.line(img, point, (int(arrow_x),int(arrow_y)), (0,0,255), 5)
-  arrow_x = point[0] + 20* math.cos(angle-pi*30/180)
-  arrow_y = point[1] + 20* math.sin(angle-pi*30/180)
-  cv2.line(img, point, (int(arrow_x),int(arrow_y)), (0,0,255), 5)
+  arrow_x = point[0] + 20* math.cos(angle+math.pi*30/180)
+  arrow_y = point[1] + 20* math.sin(angle+math.pi*30/180)
+  cv2.line(img, point, (int(arrow_x),int(arrow_y)), color, line_width)
+  arrow_x = point[0] + 20* math.cos(angle-math.pi*30/180)
+  arrow_y = point[1] + 20* math.sin(angle-math.pi*30/180)
+  cv2.line(img, point, (int(arrow_x),int(arrow_y)), color, line_width)
   return img
 
 def add_text(img, H=100, D=80, Min=0, Max=100):
