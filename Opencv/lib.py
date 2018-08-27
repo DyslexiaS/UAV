@@ -10,8 +10,8 @@ def imwrite(path, img):
 
 def rgb2blue(img):
   hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-  lower_blue = np.array([90,43,46])
-  upper_blue = np.array([124,255,255])
+  lower_blue = np.array([78,0,46])
+  upper_blue = np.array([155,255,255])
   mask_blue = cv2.inRange(hsv, lower_blue, upper_blue)
   res_blue = cv2.bitwise_and(img, img, mask=mask_blue)
   return res_blue
@@ -97,16 +97,15 @@ def draw_circle(img, circle):
   cv2.circle(img, center, radius, (255,255,255),3, 8, 0)
   return img
 
-def plot_arrow(img, point, center=(360,240)):
-  cv2.line(img, center, point, (0,0,255), 5)
-  pi = 3.1415926
+def plot_arrow(img, point, center=(360,240), color=(0,0,255), line_width=5):
+  cv2.line(img, center, point, color, line_width)
   angle = math.atan2(center[1]-point[1], center[0]-point[0])
-  arrow_x = point[0] + 20* math.cos(angle+pi*30/180)
-  arrow_y = point[1] + 20* math.sin(angle+pi*30/180)
-  cv2.line(img, point, (int(arrow_x),int(arrow_y)), (0,0,255), 5)
-  arrow_x = point[0] + 20* math.cos(angle-pi*30/180)
-  arrow_y = point[1] + 20* math.sin(angle-pi*30/180)
-  cv2.line(img, point, (int(arrow_x),int(arrow_y)), (0,0,255), 5)
+  arrow_x = point[0] + 20* math.cos(angle+math.pi*30/180)
+  arrow_y = point[1] + 20* math.sin(angle+math.pi*30/180)
+  cv2.line(img, point, (int(arrow_x),int(arrow_y)), color, line_width)
+  arrow_x = point[0] + 20* math.cos(angle-math.pi*30/180)
+  arrow_y = point[1] + 20* math.sin(angle-math.pi*30/180)
+  cv2.line(img, point, (int(arrow_x),int(arrow_y)), color, line_width)
   return img
 
   # if circles is not None  :

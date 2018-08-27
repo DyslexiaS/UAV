@@ -25,7 +25,8 @@ def plot_arrow(img, point, center=(360,240)):
   cv2.line(img, point, (int(arrow_x),int(arrow_y)), (0,0,255), 5)
   return img
 
-img_path = '../img/img_196.jpg'
+img_path = raw_input("image name:")
+img_path = '../img/'+img_path+'.jpg'
 img = imread(img_path)
 # detect circles
 img_ = rgb2blue(img)
