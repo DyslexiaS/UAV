@@ -10,7 +10,7 @@ def imwrite(path, img):
 
 def rgb2blue(img):
   hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-  lower_blue = np.array([78,43,46]) #[78,0,46]
+  lower_blue = np.array([78,0,46]) #[78,0,46]
   upper_blue = np.array([155,255,255])
   mask_blue = cv2.inRange(hsv, lower_blue, upper_blue)
   res_blue = cv2.bitwise_and(img, img, mask=mask_blue)
@@ -23,28 +23,31 @@ def alt2diagonal(alt):
 def detect_circles(img, alt):
   img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
   img = cv2.medianBlur(img,13)
-  error = 0.2
-  absolute_error = 80
-  relative_error = 0.2
-  min_alt = alt*(1-relative_error) - absolute_error
-  if min_alt <= 0:
-    min_alt = 0.1
-  max_alt = alt*(1+relative_error) + absolute_error
-  minRadius = int(math.floor(35.6 * 865 / alt2diagonal(max_alt) / 2))
-  maxRadius = int(math.ceil(35.6 * 865 / alt2diagonal(min_alt) / 2))
+  if alt != 0:
+    absolute_error = 8
+    relative_error = 0 #0.1
+    min_alt = alt*(1-relative_error) - absolute_error
+    if min_alt <= 0:
+      min_alt = 0.1
+    max_alt = alt*(1+relative_error) + absolute_error
+    minRadius = int(2670/max_alt)
+    maxRadius = int(2670/min_alt)
+  else:
+    minRadius = 0
+    maxRadius = 0
   # param1=50,param2=20, minRadius=minRadius, maxRadius=maxRadius)
 
   try:
     circles = cv2.HoughCircles(img,cv2.cv.CV_HOUGH_GRADIENT,1,20,
-      param1=50,param2=15, minRadius=0, maxRadius=0)
+      param1=50,param2=15, minRadius=minRadius, maxRadius=maxRadius)
   except:
     circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1,20,
-      param1=50,param2=15, minRadius=0, maxRadius=0)
+      param1=50,param2=15, minRadius=minRadius, maxRadius=maxRadius)
   print(alt, minRadius, maxRadius)
   print(circles)
   return circles
 
-def best_circle(circles,img,resolution=(720,480)):
+def best_circle(circles,img,resolution=(150,150)):
     if circles is None:
       return None
     # standard blue [176,122,61]
