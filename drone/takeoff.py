@@ -50,4 +50,3 @@ except:
   aTargetAltitude = 5
 
 arm_and_takeoff(aTargetAltitude)
-vehicle.mode = VehicleMode("ALT_HOLD")
