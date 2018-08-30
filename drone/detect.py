@@ -16,6 +16,8 @@ sys.path.append(join(dirname(__file__), '..', 'Opencv'))
 from lib import imread, imwrite, rgb2blue, detect_circles, alt2diagonal, best_circle, draw_circle
 
 img_dir = '../img'
+resolution = (150, 150)
+camera.resolution = resolution
 
 try:
   idx = int(sys.argv[1])
@@ -32,6 +34,7 @@ except Exception, e:
   infinite = 0
 
 def signal_handler(sig, frame):
+  global keep_running
   print("stop detecting...")
   keep_running[0] = False
 
@@ -44,7 +47,6 @@ with open(log_file, "a") as f:
   print("absolute_direction, relative_direction, angle, alt, v_x, v_y, v_z\n", file=f)
 
 while keep_running[0]:
-  time.sleep(2)
   print_important(vehicle)
   print('#'*20)
 
@@ -61,36 +63,29 @@ while keep_running[0]:
   # detect circles
   img = imread(img_path)
   img = rgb2blue(img)
+  blue_img_name = img_name[:-4]+'_blue.jpg'
+  imwrite(join(img_dir, blue_img_name), img)
   circles = detect_circles(img, alt)
-  circle = best_circle(circles, img)
+  circle = best_circle(circles, img, resolution=camera.resolution)
 
-  if save_result and circle is not None:
-    img = draw_circle(img, circle)
-    save_img_name = 'save_' + img_name
-    imwrite(join(img_dir, save_img_name), img)
 
   if circle is None:
     send_global_velocity(vehicle, 0, 0, -0.2)
     print("can't detect any circle")
   else:
-    displacement = circle[0]-360, circle[1]-240
+    if save_result:
+      img = draw_circle(img, circle)
+      save_img_name = img_name[:-4]+'_save.jpg'
+      imwrite(join(img_dir, save_img_name), img)
+    displacement = circle[0]-camera.resolution[0]//2, circle[1]-camera.resolution[1]//2
+    radius = circle[2]
 
-    # # first quadrant
-    # if displacement[0] >= 0 and displacement[1] >= 0:
-    #   direction = math.atan2(displacement[1], displacement[0])
-    # # second quadrant
-    # elif displacement[0] >= 0 and displacement[1] < 0:
-    #   direction = -math.atan2(-displacement[1], displacement[0])
-    # # third quadrant
-    # elif displacement[0] < 0 and displacement[1] < 0:
-    #   direction = math.pi + math.atan2(-displacement[1], -displacement[0])
-    # # fourth quadrant
-    # else:
-    #   direction = math.pi - math.atan2(displacement[1], -displacement[0])
     direction = math.atan2(displacement[1], displacement[0])
-    direction -= math.pi / 2
+    direction += math.pi / 2
 
-    displacement = [alt2diagonal(alt) * d / 865 for d in displacement]
+    distance_per_pixel = 2670 / radius
+    alt = distance_per_pixel * camera.resolution[0]
+    displacement = [d*distance_per_pixel for d in displacement]
 
     distance = math.sqrt(displacement[0]**2 + displacement[1]**2)
 
@@ -100,7 +95,6 @@ while keep_running[0]:
     direction += vehicle.attitude.yaw
 
     angle = math.atan(distance/alt)
-
 
     # scale
     scale_xy = 0.01
