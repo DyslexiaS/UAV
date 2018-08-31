@@ -4,6 +4,7 @@
 from __future__ import print_function
 import math
 import time
+import numpy as np
 
 from os import listdir
 from os.path import isfile, join, dirname
@@ -12,7 +13,7 @@ from set_velocity import send_global_velocity
 import signal
 import sys
 sys.path.append(join(dirname(__file__), '..', 'Opencv'))
-from lib import imread, imwrite, rgb2blue, detect_circles, alt2diagonal, best_circle, draw_circle, add_text, circle_not_found
+from lib import *
 import cv2
 
 from picamera import PiCamera
@@ -33,7 +34,9 @@ signal_old = signal.signal(signal.SIGINT, signal_handler)
 
 img_name = 'test.jpg'
 skip_once = False
-cv2.namedWindow("demo")
+cv2.namedWindow("demo", cv2.cv.CV_WINDOW_NORMAL)
+cv2.resizeWindow('demo', 600,600)
+cv2.startWindowThread()
 alt = 0
 while keep_running[0]:
   print('#'*20)
@@ -79,12 +82,12 @@ while keep_running[0]:
 
     if save_result:
       img = draw_circle(img, circle)
+      plot_arrow(img, (circle[0], circle[1]), center=(75,75), color=(0,0,255), line_width=2)
       add_text(img, H=alt, D=distance, Min=10, Max=30)
       save_img_name = img_name[:-4]+'_save.jpg'
       imwrite(join(img_dir, save_img_name), img)
   if not skip_once:
-    cv2.startWindowThread()
-    cv2.imshow("demo", img)
+    cv2.imshow("demo", np.hstack((img, img_)))
 
 
 signal.signal(signal.SIGINT, signal_old)
