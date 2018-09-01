@@ -30,7 +30,7 @@ def deg2rad(deg):
   return math.pi * deg / 180
 
 def on_press(key):
-    control_speed = 0.5
+    control_speed = 0.3
     try: k = key.char # single-char keys
     except: k = key.name # other keys
     if key == keyboard.Key.esc:
@@ -151,6 +151,8 @@ while True:
   print( "\nEnter:", end='')
   if k == 'q':
     break
+  elif k == 'm':
+    vehicle.mode = VehicleMode('GUIDED')
   key2act(k)
 
 
